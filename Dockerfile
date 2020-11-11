@@ -11,8 +11,8 @@ WORKDIR $APP_HOME
 COPY . ./
 
 # Install production dependencies.
-RUN sudo apt install libmecab-dev
-RUN sudo apt install pip
+RUN apt-get install libmecab-dev
+RUN apt-get install pip
 RUN pip install -r requirements.txt
 # Run the web service on container startup. Here we use the gunicorn
 # webserver, with one worker process and 8 threads.
