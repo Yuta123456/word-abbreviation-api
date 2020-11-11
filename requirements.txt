@@ -1,5 +1,4 @@
 Flask==1.0.2
 Flask-Cors==3.0.4
-libmecab-dev
 mecab-python3==0.7
 gunnicorn
