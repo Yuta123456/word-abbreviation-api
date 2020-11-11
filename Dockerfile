@@ -1,22 +1,38 @@
-# Use the official lightweight Python image.
-# https://hub.docker.com/_/python
-FROM python:3.8-slim
+FROM ubuntu:18.10
 
-# Allow statements and log messages to immediately appear in the Knative logs
-ENV PYTHONUNBUFFERED True
-
-# Copy local code to the container image.
-ENV APP_HOME /app
-WORKDIR $APP_HOME
-COPY . ./
-
-# Install production dependencies.
-# RUN apt-get update && apt-get install libmecab-dev
+# basic libs
 RUN apt-get update -y && apt-get upgrade -y
+RUN apt-get install -y wget build-essential gcc zlib1g-dev
+
+# latest openssl for python
+WORKDIR /root/
+RUN wget https://www.openssl.org/source/openssl-1.1.1d.tar.gz \
+        && tar zxf openssl-1.1.1d.tar.gz \
+        && cd openssl-1.1.1d \
+        && ./config \
+        && make \
+        && make install
+
+# python
+WORKDIR /root/
+RUN wget https://www.python.org/ftp/python/3.6.8/Python-3.6.8.tgz \
+        && tar zxf Python-3.6.8.tgz \
+        && cd Python-3.6.8 \
+        && ./configure \
+        && make altinstall
+ENV PYTHONIOENCODING "utf-8"
+
+WORKDIR /usr/local/bin/
+RUN ln -s python3.6 python
+RUN ln -s pip3.6 pip
+
+# mecab
+RUN apt-get install -y mecab libmecab-dev mecab-ipadic mecab-ipadic-utf8
+
+# python app settings
+ADD requirements.txt ./requirements.txt
 RUN pip install -r requirements.txt
-RUN pip install gunicorn
-# Run the web service on container startup. Here we use the gunicorn
-# webserver, with one worker process and 8 threads.
-# For environments with multiple CPU cores, increase the number of workers
-# to be equal to the cores available.
+
+WORKDIR /
+
 CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 main:app
