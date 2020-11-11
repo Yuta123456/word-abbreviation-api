@@ -12,6 +12,7 @@ COPY . ./
 
 # Install production dependencies.
 # RUN apt-get update && apt-get install libmecab-dev
+RUN apt-get update -y && apt-get upgrade -y
 RUN pip install -r requirements.txt
 RUN pip install gunicorn
 # Run the web service on container startup. Here we use the gunicorn
