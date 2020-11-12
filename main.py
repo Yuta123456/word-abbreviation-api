@@ -19,7 +19,9 @@ def parse():
     res = abbreviation(text)
     response = {'result': res}
     #print(response)
-    return make_response(jsonify(response))
+    resp = make_response(jsonify(response))
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
