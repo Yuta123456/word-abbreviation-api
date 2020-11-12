@@ -4,8 +4,6 @@ from flask_cors import CORS
 from utils import abbreviation
 import os
 app = Flask(__name__)
-CORS(app) #Cross Origin Resource Sharing
-
 @app.route("/", methods=['GET'])
 def index():
     return render_template('main.html')
