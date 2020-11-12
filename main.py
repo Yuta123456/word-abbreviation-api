@@ -11,6 +11,7 @@ def index():
 
 @app.route("/abbreviation", methods=['GET','POST'])
 @cross_origin(origin=["http://localhost:8100"], supports_credentials=True)
+@crossdomain(origin='*')
 def parse():
     #print(request.get_json())
     data = request.get_json()
