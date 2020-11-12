@@ -66,5 +66,3 @@ def split_latter(text):
         else:
             res.append(text[i])
     return res
-
-print(abbreviation(input('文字の入力>')))
