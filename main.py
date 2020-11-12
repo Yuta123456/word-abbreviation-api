@@ -10,8 +10,6 @@ def index():
     return render_template('main.html')
 
 @app.route("/abbreviation", methods=['GET','POST'])
-@cross_origin(origin=["http://localhost:8100"], supports_credentials=True)
-@crossdomain(origin='*')
 def parse():
     #print(request.get_json())
     data = request.get_json()
@@ -22,9 +20,9 @@ def parse():
     #print(response)
     resp = make_response(jsonify(response))
     resp.headers['Access-Control-Allow-Origin'] = '*'
-    resp.headers['Access-Control-Allow-Methods'] = 'PUT, ,POST,DELETE, PATCH'
+    resp.headers['Access-Control-Allow-Methods'] = 'PUT,POST,DELETE, PATCH'
     return resp
-@api.after_request
+@app.after_request
 def after_request(response):
   response.headers.add('Access-Control-Allow-Origin', '*')
   response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
