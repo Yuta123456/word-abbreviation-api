@@ -10,15 +10,14 @@ def index():
     return render_template('main.html')
 
 @app.route("/abbreviation", methods=['GET','POST'])
+
 def parse():
-    #print(request.get_json())
     data = request.get_json()
     text = data['post_text']
-
     res = abbreviation(text)
     response = {'result': res}
-    #print(response)
     return make_response(jsonify(response))
+
 @app.after_request
 def after_request(response):
   response.headers.add('Access-Control-Allow-Origin', '*')

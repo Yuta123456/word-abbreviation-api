@@ -8,7 +8,7 @@ def abbreviation(text):
     # 消したい品詞を消す
 
     word_list = [i for i in word_list if i[1].split(',')[0] not in skip_words]
-
+    
     if len(word_list) == 0:
         return "助詞、記号、助動詞、接続詞が多すぎます。"
     # 品詞分解したリストから略語を作成
@@ -22,6 +22,7 @@ def mecab_list(text):
             word_class.append((node.surface, node.part_of_speech, node.surface))
         else:
             word_class.append((node.surface, node.part_of_speech, node.reading))
+    print(word_class)
     return word_class
 
 def make_word(w_l):
@@ -42,17 +43,16 @@ def make_word(w_l):
     second = split_latter(w_l[1][-1])
 
     # firstの小書き文字を省略
-    # first = "".join([c for c in first if c not in lower_words])
     if len(w_l) == 2:
-        # secondの小書き文字を省略
+        # secondの伸ばし棒を省略
         second = [c for c in second if c != 'ー']
-        if 'ー' in set(first) or len(second) >= 3:
-            # 伸ばし棒が入っている場合や、二単語目が3文字以上の場合確定でこの形にする。
+        if 'ー' in set(first) or len(second) >= 4:
+            # 伸ばし棒が入っている場合や、二単語目が4文字以上の場合確定でこの形にする。
             first = [c for c in first if c != 'ー']
             return "".join(first[:2]) + "".join(second[:1]) + 'ー'
         else:
-            # 先頭から二文字ずつ取る
-            return "".join(first[:2]) + "".join(second[:1])
+            # 先頭から二文字、二単語目は一文字取る。
+            return "".join(first[:2]) + "".join(second[:2])
     else:
         third = w_l[2][-1]
         return "".join(first[:2]) + second[0] + third[0]
