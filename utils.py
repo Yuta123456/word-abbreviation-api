@@ -16,7 +16,7 @@ def abbreviation(text):
 
 def mecab_list(text):
     word_class = []
-    for node in tokenizer.tokenize(text):
+    for node in tokenizer.tokenize(text['submit_text']):
         word = node.surface
         if node.reading == '*':
             word_class.append((node.surface, node.part_of_speech, node.surface))
