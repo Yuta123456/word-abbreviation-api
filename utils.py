@@ -1,33 +1,27 @@
-import MeCab
+from janome.tokenizer import Tokenizer
 
+tokenizer = Tokenizer()
 def abbreviation(text):
-    print(text)
+
     word_list = mecab_list(text)
     skip_words = set(['助詞', '記号', '助動詞', '接続詞', '連体詞', '副詞'])
     # 消したい品詞を消す
-    word_list = [i for i in word_list if i[1] not in skip_words]
-    print(word_list)
+
+    word_list = [i for i in word_list if i[1].split(',')[0] not in skip_words]
+
     if len(word_list) == 0:
         return "助詞、記号、助動詞、接続詞が多すぎます。"
     # 品詞分解したリストから略語を作成
     return make_word(word_list)
 
 def mecab_list(text):
-    tagger = MeCab.Tagger("-Ochasen")
-    tagger.parse('')
-    node = tagger.parseToNode(text)
     word_class = []
-    while node:
+    for node in tokenizer.tokenize(text):
         word = node.surface
-        wclass = node.feature.split(',')
-        if wclass[0] != u'BOS/EOS':
-            if len(wclass) >= 8 and wclass[7] != None:
-                # 読みがある場合は、読みを(wclass[7])追加して返す。
-                word_class.append((word,wclass[0],wclass[1],wclass[7]))
-            else:
-                # 読みがない場合は、そのままのものを返す。
-                word_class.append((word,wclass[0],wclass[1],word))
-        node = node.next
+        if node.reading == '*':
+            word_class.append((node.surface, node.part_of_speech, node.surface))
+        else:
+            word_class.append((node.surface, node.part_of_speech, node.reading))
     return word_class
 
 def make_word(w_l):
@@ -72,3 +66,5 @@ def split_latter(text):
         else:
             res.append(text[i])
     return res
+
+print(abbreviation(input('文字の入力>')))

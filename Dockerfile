@@ -12,8 +12,6 @@ COPY . ./
 
 # Install production dependencies.
 # RUN apt-get update && apt-get install libmecab-dev
-RUN apt-get update -y && apt-get upgrade -y
-RUN apt-get install -y mecab libmecab-dev mecab-ipadic mecab-ipadic-utf8
 
 RUN pip install -r requirements.txt
 RUN pip install gunicorn
