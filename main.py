@@ -14,9 +14,9 @@ def index():
 def parse():
     data = request.get_json()
     text = data['post_text']
-    res = abbreviation(text)
+    res, status_code = abbreviation(text)
     response = {'result': res}
-    return make_response(jsonify(response))
+    return make_response(jsonify(response), status_code)
 
 @app.after_request
 def after_request(response):
